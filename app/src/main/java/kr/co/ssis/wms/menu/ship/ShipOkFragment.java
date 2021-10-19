@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -112,12 +113,16 @@ public class ShipOkFragment extends CommonFragment {
         tv_cnt = v.findViewById(R.id.tv_cnt);
 
 
-        /*mAdapter = new ListAdapter();
-        ship_ok_listview.setAdapter(mAdapter);*/
-
         ship_ok_listview.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         mAdapter = new ListAdapter(getActivity());
         ship_ok_listview.setAdapter(mAdapter);
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+
+        ship_ok_listview.setLayoutManager(mLayoutManager);
+
 
         tv_itm_code.setText(order.getItm_code());
         tv_itm_name.setText(order.getItm_name());
@@ -177,23 +182,6 @@ public class ShipOkFragment extends CommonFragment {
         });
 
     }//Close onResume
-
-    Comparator<ShipOkModel.Item> noDesc = new Comparator<ShipOkModel.Item>() {
-
-        @Override
-        public int compare(ShipOkModel.Item item1, ShipOkModel.Item item2) {
-            int ret = 0;
-
-            if (item1.getNo() < item2.getNo()) {
-                ret = 1;
-            } else if (item1.getNo() == item2.getNo()) {
-                ret = 0;
-            } else {
-                ret = -1;
-            }
-            return ret;
-        }
-    };
 
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -285,11 +273,11 @@ public class ShipOkFragment extends CommonFragment {
                                 ship_ok_listview.setAdapter(mAdapter);
                                 mBarcode.add(mOrderNo);
 
-                                Collections.sort(mAdapter.itemsList, noDesc);
-                                Collections.reverse(mAdapter.itemsList);
-
                                 mAdapter.notifyDataSetChanged();
                                 tv_cnt.setText(mAdapter.getItemCount() + " 건");
+
+
+                                //mAdapter.notifyDataSetChanged();
 
                                 for (int j = 0; j < mAdapter.getItemCount(); j++) {
                                     c_cnt += mAdapter.itemsList.get(j).getWrk_qty();
@@ -385,7 +373,7 @@ public class ShipOkFragment extends CommonFragment {
             holder.tv_ea.setText(order.getC_name());
             holder.inv_qty.setText(Integer.toString(item.getWrk_qty()));
             holder.tv_no.setText(Integer.toString(position));
-            item.setNo(position);
+            item.setNo(mAdapter.getCount());
 
             holder.inv_qty.addTextChangedListener(new TextWatcher() {
                 String result = "";
@@ -405,12 +393,12 @@ public class ShipOkFragment extends CommonFragment {
                 public void afterTextChanged(Editable s) {
                     Log.d("JeLib", "---------------------------");
 
-                    if (s.toString().length() == 0){
+                    if (s.toString().length() == 0) {
                         itemsList.get(holder.getAdapterPosition()).setWrk_qty(0);
 
                         tv_pickin_qty.setText("");
 
-                        int c_cnt =0;
+                        int c_cnt = 0;
                         for (int j = 0; j < mAdapter.getItemCount(); j++) {
                             c_cnt += mAdapter.itemsList.get(j).getWrk_qty();
 
@@ -431,14 +419,12 @@ public class ShipOkFragment extends CommonFragment {
 
                         tv_pickin_qty.setText("");
 
-                        int c_cnt =0;
+                        int c_cnt = 0;
                         for (int j = 0; j < mAdapter.getItemCount(); j++) {
                             c_cnt += mAdapter.itemsList.get(j).getWrk_qty();
 
                         }
                         tv_pickin_qty.setText(Utils.setComma(c_cnt));
-
-
 
 
                     }
@@ -498,7 +484,6 @@ public class ShipOkFragment extends CommonFragment {
             }
         }
     }
-
 
 
 }//Close Activity

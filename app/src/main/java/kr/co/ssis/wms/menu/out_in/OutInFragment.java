@@ -353,7 +353,7 @@ public class OutInFragment extends CommonFragment {
                                     tv_c_name.setText(item.getC_name());
                                     tv_qty.setText(Integer.toString(item.getTin_qty()));
                                     tv_no.setText(item.getBor_code());
-                                    mIncode.add(item.getCst_code());
+                                    //mIncode.add(item.getCst_code());
 
                                 }
 

@@ -192,8 +192,6 @@ public class ShipFragment extends CommonFragment {
         extras.putSerializable("position", position);
         intent.putExtra("args", extras);
         startActivityForResult(intent, 100);
-
-
     }
 
 
