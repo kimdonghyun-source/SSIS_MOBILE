@@ -79,6 +79,7 @@ public class ShipOkFragment extends CommonFragment {
     Activity mActivity;
     ArrayList<ShipOkModel.Item> listViewItemList = new ArrayList<ShipOkModel.Item>();
 
+
     private SoundPool sound_pool;
     int soundId;
     MediaPlayer mediaPlayer;
@@ -152,6 +153,14 @@ public class ShipOkFragment extends CommonFragment {
                     String barcode = event.getBarcodeData();
                     barcodeScan = barcode;
 
+                    if (mBarcode != null) {
+                        if (mBarcode.contains(barcode)) {
+                            Utils.Toast(mContext, "동일한 바코드를 스캔하였습니다.");
+                            return;
+                        }
+                    }
+
+
                     if (beg_barcode != null) {
                         if (beg_barcode.equals(barcodeScan)) {
                             Utils.Toast(mContext, "동일한 바코드를 스캔하였습니다.");
@@ -173,7 +182,8 @@ public class ShipOkFragment extends CommonFragment {
                         return;
                     } else {
                         pdaSerialScan();
-                        mOrderNo = barcode;
+                        beg_barcode = barcodeScan;
+                        //mOrderNo = barcode;
 
                     }
 
@@ -271,7 +281,7 @@ public class ShipOkFragment extends CommonFragment {
                                 }
 
                                 ship_ok_listview.setAdapter(mAdapter);
-                                mBarcode.add(mOrderNo);
+
 
                                 mAdapter.notifyDataSetChanged();
                                 tv_cnt.setText(mAdapter.getItemCount() + " 건");
@@ -286,7 +296,9 @@ public class ShipOkFragment extends CommonFragment {
                                 tv_pickin_qty.setText(Utils.setComma(c_cnt));
                             }
 
-                            beg_barcode = barcodeScan;
+                            mBarcode.add(barcodeScan);
+
+
 
                         } else {
                             Utils.Toast(mContext, model.getMSG());
@@ -436,6 +448,7 @@ public class ShipOkFragment extends CommonFragment {
                 public void onClick(View v) {
 
                     itemsList.remove(position);
+                    mBarcode.remove(barcodeScan);
                     mAdapter.notifyDataSetChanged();
                     tv_cnt.setText(mAdapter.getItemCount() + " 건");
 
@@ -453,6 +466,7 @@ public class ShipOkFragment extends CommonFragment {
                         beg_barcode = "";
                     }
                 }
+
             });
 
 
@@ -483,6 +497,12 @@ public class ShipOkFragment extends CommonFragment {
 
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBarcode.clear();
     }
 
 

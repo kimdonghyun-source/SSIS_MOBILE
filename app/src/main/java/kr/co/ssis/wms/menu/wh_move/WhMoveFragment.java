@@ -62,15 +62,15 @@ import retrofit2.Response;
 
 public class WhMoveFragment extends CommonFragment {
 
-    EditText et_from, et_from2;
-    TextView tv_empty, tv_list_cnt, tv_cnt;
+    EditText et_from;
+    TextView tv_empty, tv_list_cnt, tv_cnt, et_from2;
     RecyclerView recycleview;
     ImageButton bt_next, bt_from2;
     List<String> mBarcode;
     String mLocation;
     LocationWhSearchPopup mlocationWhListPopup;
     List<WhModel.Item> mWhList;
-    String wh_code, wh_code2;
+    String wh_code, wh_code2, beg_barcode;
     WhMoveListModel moveModel;
     List<WhMoveListModel.Item> moveListModel;
     ListView wh_move_listView;
@@ -112,6 +112,7 @@ public class WhMoveFragment extends CommonFragment {
 
         bt_from2.setOnClickListener(onClickListener);
         bt_next.setOnClickListener(onClickListener);
+        et_from2.setOnClickListener(onClickListener);
 
         sound_pool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         soundId = sound_pool.load(mContext, R.raw.beepum, 1);
@@ -153,8 +154,17 @@ public class WhMoveFragment extends CommonFragment {
                         Utils.Toast(mContext, "동일한 품목을 선택하셨습니다.");
                         return;
                     }
+
+                    if (beg_barcode != null){
+                        if (beg_barcode.equals(barcode)){
+                            Utils.Toast(mContext, "동일한 품목을 선택하셨습니다.");
+                            return;
+                        }
+                    }
+
                     tv_empty.setVisibility(View.GONE);
                     mLocation = barcode;
+                    beg_barcode = barcode;
                     pdaSerialScan();
                 }
             }
@@ -167,6 +177,20 @@ public class WhMoveFragment extends CommonFragment {
             switch (view.getId()) {
 
                 case R.id.bt_from2:
+                    mlocationWhListPopup = new LocationWhSearchPopup(getActivity(), R.drawable.popup_title_searchloc, new Handler() {
+                        @Override
+                        public void handleMessage(Message msg) {
+                            if (msg.what == 1) {
+                                mlocationWhListPopup.hideDialog();
+                                WhModel.Item order = (WhModel.Item) msg.obj;
+                                et_from2.setText("[" + order.getWh_code() + "] " + order.getWh_name());
+                                wh_code2 = order.getWh_code();
+                            }
+                        }
+                    });
+                    break;
+
+                case R.id.et_from2:
                     mlocationWhListPopup = new LocationWhSearchPopup(getActivity(), R.drawable.popup_title_searchloc, new Handler() {
                         @Override
                         public void handleMessage(Message msg) {
@@ -219,6 +243,12 @@ public class WhMoveFragment extends CommonFragment {
                     if (moveModel != null) {
                         if (moveModel.getFlag() == ResultModel.SUCCESS) {
                             if (model.getItems().size() > 0) {
+
+                                if (wh_code2.equals(moveModel.getItems().get(0).getWh_code())){
+                                    Utils.Toast(mContext, "동일한 창고를 선택하였습니다.");
+                                    return;
+                                }
+
                                 cnt += moveModel.getItems().get(0).getInv_qty();
                                 for (int i = 0; i < model.getItems().size(); i++) {
 
@@ -330,7 +360,7 @@ public class WhMoveFragment extends CommonFragment {
             }
 
             final WhMoveListModel.Item data = moveListModel.get(position);
-            holder.itm_name.setText(data.getItm_name());
+            holder.itm_name.setText(data.getItm_code()+ "  " +data.getItm_name());
             holder.tv_c_name.setText(data.getC_name());
             holder.tv_wh_name.setText(data.getWh_name());
             holder.inv_qty.setText(Integer.toString(data.getInv_qty()));

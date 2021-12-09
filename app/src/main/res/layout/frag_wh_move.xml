@@ -151,12 +151,11 @@
             android:background="@drawable/menu_moveloc_searchloc_f"
             android:orientation="horizontal">
 
-            <EditText
+            <TextView
                 android:id="@+id/et_from2"
                 style="@style/EditTextLocation"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:enabled="false" />
+                android:layout_marginRight="15dp"/>
 
             <ImageButton
                 android:id="@+id/bt_from2"
@@ -185,16 +184,16 @@
             android:layout_gravity="center"
             android:textSize="15dp"
             android:gravity="center"
-            android:text="총 수량:" />
+            android:text="총 건수:" />
 
         <TextView
             android:id="@+id/tv_cnt"
             android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:textSize="15dp"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="15dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -203,17 +202,17 @@
             android:layout_gravity="center"
             android:textSize="15dp"
             android:gravity="center"
-            android:text="총 건수:"
+            android:text="총 수량:"
             android:layout_marginLeft="5dp"/>
 
         <TextView
             android:id="@+id/tv_list_cnt"
             android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:textSize="15dp"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="15dp" />
     </LinearLayout>
 
 
