@@ -31,6 +31,9 @@ public class Define {
     //완제품창고입출력조회
     public static final int MENU_WH_INOUT_SEARCH = 8;
 
+    //개발품출고처리
+    public static final int MENU_NEW_OUT_OK = 9;
+
 
 
     //---------------------------------------------------------
@@ -60,6 +63,9 @@ public class Define {
 
     //창고이동
     public static final String TAG_WH_MOVE = "whmove";
+
+    //개발품출고처리
+    public static final String TAG_NEW_OUT_OK = "newoutok";
 
 
 

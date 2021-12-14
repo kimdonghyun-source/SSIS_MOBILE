@@ -98,7 +98,6 @@
             android:src="@drawable/main_menu6" />
 
         <ImageButton
-
             android:id="@+id/bt_menu_7"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -106,6 +105,16 @@
             android:layout_weight="0.5"
             android:background="@android:color/transparent"
             android:src="@drawable/main_menu7" />
+
+        <ImageButton
+            android:id="@+id/bt_menu_10"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:background="@android:color/transparent"
+            android:src="@drawable/main_menu10" />
+        
 
     </LinearLayout>
 </LinearLayout>

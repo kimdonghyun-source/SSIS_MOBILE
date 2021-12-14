@@ -28,6 +28,7 @@ import kr.co.ssis.wms.custom.CommonFragment;
 
 import kr.co.ssis.wms.menu.inout_search.InOutSearchFragment;
 import kr.co.ssis.wms.menu.inventorys.InventorysFragment;
+import kr.co.ssis.wms.menu.new_out.NewOutFragment;
 import kr.co.ssis.wms.menu.ok_group.InGroupFragment;
 import kr.co.ssis.wms.menu.ok_lot.InLotFragment;
 import kr.co.ssis.wms.menu.out_list.MorOutListFragment;
@@ -89,6 +90,7 @@ public class BaseActivity extends CommonCompatActivity {
         list.add("외주품출고확인");
         list.add("재고실사등록");
         list.add("완제품창고입출력조회");
+        list.add("개발출출고처리");
 
 
         ListView listView = findViewById(R.id.list);
@@ -180,6 +182,12 @@ public class BaseActivity extends CommonCompatActivity {
                 break;
             }
 
+            //개발품출고처리
+            case Define.MENU_NEW_OUT_OK: {
+                CommonFragment fragment = new NewOutFragment();
+                replaceContent(fragment, Define.TAG_NEW_OUT_OK, R.id.fl_content);
+                break;
+            }
 
 
 

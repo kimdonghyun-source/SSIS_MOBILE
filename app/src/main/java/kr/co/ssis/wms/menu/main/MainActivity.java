@@ -35,6 +35,7 @@ public class MainActivity extends CommonCompatActivity {
         findViewById(R.id.bt_menu_6).setOnClickListener(onClickListener); //재고실사등록
         findViewById(R.id.bt_menu_7).setOnClickListener(onClickListener); //완제품창고입출력조회
         findViewById(R.id.bt_menu_9).setOnClickListener(onClickListener); //창고이동
+        findViewById(R.id.bt_menu_10).setOnClickListener(onClickListener); //개발품출고처리
         findViewById(R.id.bt_logout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,6 +103,11 @@ public class MainActivity extends CommonCompatActivity {
                 //창고이동(성신)
                 case R.id.bt_menu_9:
                     intent.putExtra("menu", Define.MENU_WH_MOVE);
+                    break;
+
+                //개발품출고처리
+                case R.id.bt_menu_10:
+                    intent.putExtra("menu", Define.MENU_NEW_OUT_OK);
                     break;
 
             }

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingLeft="15dp">
+
+
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:background="@drawable/text31"
+            android:paddingLeft="15dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.18"/>
+
+        <TextView
+            android:id="@+id/item_date"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1.5"
+            android:background="@drawable/wareround"
+            android:drawableRight="@drawable/ware_calendericon"
+            android:gravity="center|left"
+            android:text="2021-12-03"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:textColor="#000000"
+            android:textSize="15dp" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/text1"
+            android:paddingLeft="15dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/menu_moveloc_searchloc_f"
+            android:orientation="horizontal">
+
+            <EditText
+                android:focusable="false"
+                android:id="@+id/et_from"
+                style="@style/EditTextLocation"
+                android:layout_height="wrap_content"/>
+
+            <ImageButton
+                android:id="@+id/bt_cst"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|right"
+                android:background="@android:color/transparent"
+                android:padding="5dp"
+                android:src="@drawable/menu_inhouse_bt_search"
+                tools:ignore="RtlHardcoded" />
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/menu_inhouse_grid"/>
+
+    <!--<androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ship_listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:nestedScrollingEnabled="false" />-->
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/new_out_listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:nestedScrollingEnabled="false" />
+
+
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:id="@+id/print_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/print_grid" />
+
+
+        <ImageButton
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffff"
+            android:src="@drawable/menu_new_out_bottom" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/text32"
+            android:paddingLeft="15dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/menu_moveloc_searchloc_f"
+            android:orientation="horizontal">
+
+            <EditText
+                android:focusable="false"
+                android:id="@+id/et_dpt"
+                style="@style/EditTextLocation"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/menu_bg"/>
+</LinearLayout>

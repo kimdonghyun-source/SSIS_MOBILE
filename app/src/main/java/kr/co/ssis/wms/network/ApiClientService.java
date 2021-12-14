@@ -30,6 +30,7 @@ import kr.co.ssis.wms.model.MaterialOutListModel;
 import kr.co.ssis.wms.model.MorListModel;
 import kr.co.ssis.wms.model.MorSerialScan;
 import kr.co.ssis.wms.model.MoveAskModel;
+import kr.co.ssis.wms.model.NewOutModel;
 import kr.co.ssis.wms.model.OutInModel;
 import kr.co.ssis.wms.model.OutOkModel;
 import kr.co.ssis.wms.model.PalletSnanModel;
@@ -84,6 +85,18 @@ public interface ApiClientService {
      * */
     @POST("R2JsonProc.asp")
     Call<OutInModel> outinSerialScan(
+            @Query("proc") String proc,
+            @Query("param1") String lot_no
+
+    );
+
+    /**
+     * 개발품출고(시리얼스캔)
+     * @param proc 프로시저
+     * @param lot_no lot_no
+     * */
+    @POST("R2JsonProc.asp")
+    Call<NewOutModel> newoutSerialScan(
             @Query("proc") String proc,
             @Query("param1") String lot_no
 
@@ -315,6 +328,15 @@ public interface ApiClientService {
             @Query("param1") String beg_date,
             @Query("param2") String end_date,
             @Query("param3") String itm_code
+    );
+
+    /**
+     * 개발품출고처리 타계정등록관리 저장
+     * */
+    @Headers({"Content-Type: application/json;charset=UTF-8"})
+    @POST("R2JsonProc_dis_ship_save.asp")
+    Call<ResultModel> postNewOutSave(
+            @Body RequestBody body
     );
 
 
