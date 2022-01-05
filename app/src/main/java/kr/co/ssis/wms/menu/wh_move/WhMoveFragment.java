@@ -67,7 +67,7 @@ public class WhMoveFragment extends CommonFragment {
     RecyclerView recycleview;
     ImageButton bt_next, bt_from2;
     List<String> mBarcode;
-    String mLocation;
+    String mLocation, BarcodeScan;
     LocationWhSearchPopup mlocationWhListPopup;
     List<WhModel.Item> mWhList;
     String wh_code, wh_code2, beg_barcode;
@@ -77,7 +77,7 @@ public class WhMoveFragment extends CommonFragment {
     ListAdapter mAdapter;
     OneBtnPopup mOneBtnPopup;
     TwoBtnPopup mTwoBtnPopup;
-    int cnt = 0;
+
     private SoundPool sound_pool;
     int soundId;
     MediaPlayer mediaPlayer;
@@ -132,6 +132,7 @@ public class WhMoveFragment extends CommonFragment {
 
                     BarcodeReadEvent event = (BarcodeReadEvent) msg.obj;
                     String barcode = event.getBarcodeData();
+                    BarcodeScan = barcode;
 
                     /*if (wh_code == null) {
                         Utils.Toast(mContext, "출하창고를 선택해주세요.");
@@ -146,25 +147,41 @@ public class WhMoveFragment extends CommonFragment {
                     if (wh_code != null && wh_code2 != null) {
                         if (wh_code.equals(wh_code2)) {
                             Utils.Toast(mContext, "동일한 창고를 선택하셨습니다.");
+                            sound_pool.play(soundId, 1f, 1f, 0, 1, 1f);
+                            mediaPlayer = MediaPlayer.create(mContext, R.raw.beepum);
+                            mediaPlayer.start();
                             return;
                         }
                     }
 
-                    if (mBarcode.contains(barcode)) {
+                    if (mBarcode.contains(BarcodeScan)) {
                         Utils.Toast(mContext, "동일한 품목을 선택하셨습니다.");
+                        sound_pool.play(soundId, 1f, 1f, 0, 1, 1f);
+                        mediaPlayer = MediaPlayer.create(mContext, R.raw.beepum);
+                        mediaPlayer.start();
                         return;
                     }
 
                     if (beg_barcode != null){
-                        if (beg_barcode.equals(barcode)){
+                        if (beg_barcode.equals(BarcodeScan)){
                             Utils.Toast(mContext, "동일한 품목을 선택하셨습니다.");
+                            sound_pool.play(soundId, 1f, 1f, 0, 1, 1f);
+                            mediaPlayer = MediaPlayer.create(mContext, R.raw.beepum);
+                            mediaPlayer.start();
                             return;
                         }
                     }
 
+                    if (wh_code2 == null) {
+                        Utils.Toast(mContext, "입고창고를 선택해주세요.");
+                        sound_pool.play(soundId, 1f, 1f, 0, 1, 1f);
+                        mediaPlayer = MediaPlayer.create(mContext, R.raw.beepum);
+                        mediaPlayer.start();
+                        return;
+                    }
+
                     tv_empty.setVisibility(View.GONE);
-                    mLocation = barcode;
-                    beg_barcode = barcode;
+                    beg_barcode = BarcodeScan;
                     pdaSerialScan();
                 }
             }
@@ -231,7 +248,7 @@ public class WhMoveFragment extends CommonFragment {
     private void pdaSerialScan() {
         ApiClientService service = ApiClientService.retrofit.create(ApiClientService.class);
 
-        Call<WhMoveListModel> call = service.WhMoveList("sp_pda_lot_list", mLocation);
+        Call<WhMoveListModel> call = service.WhMoveList("sp_pda_inv_lot_list", BarcodeScan, wh_code2);
 
         call.enqueue(new Callback<WhMoveListModel>() {
             @Override
@@ -243,13 +260,13 @@ public class WhMoveFragment extends CommonFragment {
                     if (moveModel != null) {
                         if (moveModel.getFlag() == ResultModel.SUCCESS) {
                             if (model.getItems().size() > 0) {
-
+                                int cnt = 0;
                                 if (wh_code2.equals(moveModel.getItems().get(0).getWh_code())){
                                     Utils.Toast(mContext, "동일한 창고를 선택하였습니다.");
                                     return;
                                 }
 
-                                cnt += moveModel.getItems().get(0).getInv_qty();
+                                //cnt += moveModel.getItems().get(0).getInv_qty();
                                 for (int i = 0; i < model.getItems().size(); i++) {
 
                                     WhMoveListModel.Item item = (WhMoveListModel.Item) model.getItems().get(i);
@@ -264,16 +281,21 @@ public class WhMoveFragment extends CommonFragment {
                                 }
                                 mAdapter.notifyDataSetChanged();
                                 wh_move_listView.setAdapter(mAdapter);
-                                mBarcode.add(mLocation);
+                                mBarcode.add(BarcodeScan);
                                 et_from.setText("[" + moveModel.getItems().get(0).getWh_code() + "] " + moveModel.getItems().get(0).getWh_name());
                                 wh_code = moveModel.getItems().get(0).getWh_code();
                                 tv_cnt.setText(Integer.toString(mAdapter.getCount()));
+                                for (int j = 0; j < mAdapter.getCount(); j++){
+
+                                    cnt += moveListModel.get(j).getInv_qty();
+                                }
                                 tv_list_cnt.setText(Integer.toString(cnt));
 
                             }
 
                         } else {
                             Utils.Toast(mContext, model.getMSG());
+                            beg_barcode = "";
                             sound_pool.play(soundId, 1f, 1f, 0, 1, 1f);
                             mediaPlayer = MediaPlayer.create(mContext, R.raw.beepum);
                             mediaPlayer.start();
@@ -349,7 +371,7 @@ public class WhMoveFragment extends CommonFragment {
 
                 holder.itm_name = v.findViewById(R.id.tv_itm_name);
                 holder.tv_c_name = v.findViewById(R.id.tv_c_name);
-                holder.tv_wh_name = v.findViewById(R.id.tv_wh_name);
+                //holder.tv_wh_name = v.findViewById(R.id.tv_wh_name);
                 holder.inv_qty = v.findViewById(R.id.tv_inv_qty);
                 holder.tv_lot = v.findViewById(R.id.tv_lot);
 
@@ -362,9 +384,9 @@ public class WhMoveFragment extends CommonFragment {
             final WhMoveListModel.Item data = moveListModel.get(position);
             holder.itm_name.setText(data.getItm_code()+ "  " +data.getItm_name());
             holder.tv_c_name.setText(data.getC_name());
-            holder.tv_wh_name.setText(data.getWh_name());
+            //holder.tv_wh_name.setText(data.getWh_name());
             holder.inv_qty.setText(Integer.toString(data.getInv_qty()));
-            holder.tv_lot.setText(data.getLot_no());
+            holder.tv_lot.setText(data.getLot_no()+ "   " + data.getWh_name());
 
 
             return v;

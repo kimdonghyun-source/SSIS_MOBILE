@@ -25,25 +25,24 @@
         android:textSize="13dp"
         android:textColor="#000000"/>
 
-    <TextView
+<!--    <TextView
         android:singleLine="true"
         android:ellipsize="end"
         android:gravity="center"
         android:id="@+id/tv_wh_name"
         android:layout_width="0dp"
         android:text=""
-        android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_height="0dp"
         android:layout_gravity="center"
         android:textSize="13dp"
-        android:textColor="#000000"/>
+        android:textColor="#000000"/>-->
 
     <TextView
         android:paddingLeft="2dp"
         android:id="@+id/tv_c_name"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.3"
+        android:layout_weight="0.15"
         android:layout_gravity="center"
         android:gravity="center"
         android:textSize="13dp"
@@ -57,7 +56,7 @@
         android:id="@+id/tv_inv_qty"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.3"
+        android:layout_weight="0.15"
         android:layout_gravity="center"
         android:textSize="13dp"
         android:textColor="#000000"/>

@@ -106,11 +106,13 @@ public interface ApiClientService {
      * 창고이동 재고이동(시리얼스캔)
      * @param proc 프로시저
      * @param lot_no lot_no
+     * @param wh_code 입고창고
      * */
     @POST("R2JsonProc.asp")
     Call<WhMoveListModel> WhMoveList(
             @Query("proc") String proc,
-            @Query("param1") String lot_no
+            @Query("param1") String lot_no,
+            @Query("param2") String wh_code
 
     );
 

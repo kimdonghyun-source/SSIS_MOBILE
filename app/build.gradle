@@ -32,8 +32,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             //buildConfig 설정
-            buildConfigField "String", "API_SERVER", "\"http://211.56.248.25:14283/SUNGSIN/Mobile/\""       //성신테스트
-            //buildConfigField "String", "API_SERVER", "\"http://112.217.199.74:14283/SUNGSIN/Mobile/\""       //성신라이브
+            //buildConfigField "String", "API_SERVER", "\"http://211.56.248.25:14283/SUNGSIN/Mobile/\""       //성신테스트
+            buildConfigField "String", "API_SERVER", "\"http://112.217.199.74:14283/SUNGSIN/Mobile/\""       //성신라이브
+            //buildConfigField "String", "API_SERVER", "\"http://192.168.50.151:14283/SUNGSIN/Mobile/\""       //성신내부DB
         }
 
         release {
@@ -41,8 +42,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             //buildConfig 설정
-            buildConfigField "String", "API_SERVER", "\"http://211.56.248.25:14283/SUNGSIN/Mobile/\""       //성신테스트
-            //buildConfigField "String", "API_SERVER", "\"http://112.217.199.74:14283/SUNGSIN/Mobile/\""       //성신라이브
+            //buildConfigField "String", "API_SERVER", "\"http://211.56.248.25:14283/SUNGSIN/Mobile/\""       //성신테스트
+            buildConfigField "String", "API_SERVER", "\"http://112.217.199.74:14283/SUNGSIN/Mobile/\""       //성신라이브
+            //buildConfigField "String", "API_SERVER", "\"http://192.168.50.151:14283/SUNGSIN/Mobile/\""       //성신내부DB
 
             signingConfig signingConfigs.release
         }
