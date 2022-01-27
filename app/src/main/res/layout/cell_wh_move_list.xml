@@ -1,11 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 주문자재출고 조회 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="70dp"
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
-    android:orientation="vertical">
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.1">
+
+        <TextView
+            android:id="@+id/tv_no"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,18 +46,6 @@
         android:ellipsize="end"
         android:textSize="13dp"
         android:textColor="#000000"/>
-
-<!--    <TextView
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:gravity="center"
-        android:id="@+id/tv_wh_name"
-        android:layout_width="0dp"
-        android:text=""
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:textSize="13dp"
-        android:textColor="#000000"/>-->
 
     <TextView
         android:paddingLeft="2dp"
@@ -69,11 +79,25 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_gravity="center"
-        android:layout_marginLeft="5dp"
         android:textSize="13dp"
         android:textColor="#000000"
         android:gravity="left|center"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/bt_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/trans"
+            android:src="@drawable/pallet_merge_bt_delete" />
+
+    </LinearLayout>
 
 </LinearLayout>
 

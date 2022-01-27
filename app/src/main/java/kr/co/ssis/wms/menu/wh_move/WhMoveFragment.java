@@ -1,5 +1,6 @@
 package kr.co.ssis.wms.menu.wh_move;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -21,6 +22,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -42,12 +44,15 @@ import kr.co.ssis.wms.menu.popup.LocationItmSearchPopup;
 import kr.co.ssis.wms.menu.popup.LocationWhSearchPopup;
 import kr.co.ssis.wms.menu.popup.OneBtnPopup;
 import kr.co.ssis.wms.menu.popup.TwoBtnPopup;
+import kr.co.ssis.wms.menu.ship.ShipAdapter;
 import kr.co.ssis.wms.menu.ship.ShipFragment;
 import kr.co.ssis.wms.menu.ship.ShipOkFragment;
 import kr.co.ssis.wms.menu.stock.StockFragmentDetail;
 import kr.co.ssis.wms.model.ItmListModel;
 import kr.co.ssis.wms.model.OutInModel;
 import kr.co.ssis.wms.model.ResultModel;
+import kr.co.ssis.wms.model.ShipListModel;
+import kr.co.ssis.wms.model.ShipOkModel;
 import kr.co.ssis.wms.model.StockDetailModel;
 import kr.co.ssis.wms.model.WarehouseModel;
 import kr.co.ssis.wms.model.WhModel;
@@ -73,7 +78,7 @@ public class WhMoveFragment extends CommonFragment {
     String wh_code, wh_code2, beg_barcode;
     WhMoveListModel moveModel;
     List<WhMoveListModel.Item> moveListModel;
-    ListView wh_move_listView;
+    RecyclerView wh_move_listView;
     ListAdapter mAdapter;
     OneBtnPopup mOneBtnPopup;
     TwoBtnPopup mTwoBtnPopup;
@@ -107,8 +112,16 @@ public class WhMoveFragment extends CommonFragment {
         tv_cnt = v.findViewById(R.id.tv_cnt);
         wh_move_listView = v.findViewById(R.id.wh_move_listView);
 
-        mAdapter = new ListAdapter();
+
+        wh_move_listView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        mAdapter = new ListAdapter(getActivity());
         wh_move_listView.setAdapter(mAdapter);
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+
+        wh_move_listView.setLayoutManager(mLayoutManager);
 
         bt_from2.setOnClickListener(onClickListener);
         bt_next.setOnClickListener(onClickListener);
@@ -133,16 +146,6 @@ public class WhMoveFragment extends CommonFragment {
                     BarcodeReadEvent event = (BarcodeReadEvent) msg.obj;
                     String barcode = event.getBarcodeData();
                     BarcodeScan = barcode;
-
-                    /*if (wh_code == null) {
-                        Utils.Toast(mContext, "출하창고를 선택해주세요.");
-                        return;
-                    }
-
-                    if (wh_code2 == null) {
-                        Utils.Toast(mContext, "입고창고를 선택해주세요.");
-                        return;
-                    }*/
 
                     if (wh_code != null && wh_code2 != null) {
                         if (wh_code.equals(wh_code2)) {
@@ -222,7 +225,7 @@ public class WhMoveFragment extends CommonFragment {
                     break;
 
                 case R.id.bt_next:
-                    if (mAdapter.getCount() <= 0) {
+                    if (mAdapter.itemsList.size() <= 0) {
                         Utils.Toast(mContext, "이동할 품목이 없습니다.");
                         return;
                     }
@@ -245,7 +248,7 @@ public class WhMoveFragment extends CommonFragment {
     /**
      * 창고이동 바코드스캔
      */
-    private void pdaSerialScan() {
+    /*private void pdaSerialScan() {
         ApiClientService service = ApiClientService.retrofit.create(ApiClientService.class);
 
         Call<WhMoveListModel> call = service.WhMoveList("sp_pda_inv_lot_list", BarcodeScan, wh_code2);
@@ -266,6 +269,7 @@ public class WhMoveFragment extends CommonFragment {
                                     return;
                                 }
 
+
                                 //cnt += moveModel.getItems().get(0).getInv_qty();
                                 for (int i = 0; i < model.getItems().size(); i++) {
 
@@ -279,13 +283,14 @@ public class WhMoveFragment extends CommonFragment {
                                     mAdapter.addData(item);
 
                                 }
-                                mAdapter.notifyDataSetChanged();
-                                wh_move_listView.setAdapter(mAdapter);
+                                *//*mAdapter.notifyDataSetChanged();
+                                wh_move_listView.setAdapter(mAdapter);*//*
+
                                 mBarcode.add(BarcodeScan);
                                 et_from.setText("[" + moveModel.getItems().get(0).getWh_code() + "] " + moveModel.getItems().get(0).getWh_name());
                                 wh_code = moveModel.getItems().get(0).getWh_code();
-                                tv_cnt.setText(Integer.toString(mAdapter.getCount()));
-                                for (int j = 0; j < mAdapter.getCount(); j++){
+                                tv_cnt.setText(Integer.toString(mAdapter.getItemCount()));
+                                for (int j = 0; j < mAdapter.getItemCount(); j++){
 
                                     cnt += moveListModel.get(j).getInv_qty();
                                 }
@@ -314,92 +319,204 @@ public class WhMoveFragment extends CommonFragment {
                 Utils.Toast(mContext, getString(R.string.error_network));
             }
         });
+    }//Close*/
+
+
+    /**
+     * 창고이동 바코드스캔
+     */
+    private void pdaSerialScan() {
+        ApiClientService service = ApiClientService.retrofit.create(ApiClientService.class);
+
+        Call<WhMoveListModel> call = service.WhMoveList("sp_pda_inv_lot_list", BarcodeScan, wh_code2);
+
+        call.enqueue(new Callback<WhMoveListModel>() {
+            @Override
+            public void onResponse(Call<WhMoveListModel> call, Response<WhMoveListModel> response) {
+                if (response.isSuccessful()) {
+                    moveModel = response.body();
+                    final WhMoveListModel model = response.body();
+                    Utils.Log("model ==> :" + new Gson().toJson(model));
+                    if (moveModel != null) {
+                        if (moveModel.getFlag() == ResultModel.SUCCESS) {
+
+                            //AidcReader.getInstance().claim(mContext);    스캐너 다시 활성화
+
+                            if (model.getItems().size() > 0) {
+                                moveListModel = model.getItems();
+
+                                int cnt = 0;
+                                if (wh_code2.equals(moveModel.getItems().get(0).getWh_code())){
+                                    Utils.Toast(mContext, "동일한 창고를 선택하였습니다.");
+                                    return;
+                                }
+
+                                for (int i = 0; i < model.getItems().size(); i++) {
+
+                                    WhMoveListModel.Item item = (WhMoveListModel.Item) model.getItems().get(i);
+                                    if (wh_code != null) {
+                                        if (!wh_code.equals(item.getWh_code())) {
+                                            Utils.Toast(mContext, "출하창고에 해당 시리얼 재고가 없습니다.");
+                                            return;
+                                        }
+                                    }
+                                    mAdapter.addData(item);
+
+                                }
+
+                                mAdapter.notifyDataSetChanged();
+                                wh_move_listView.setAdapter(mAdapter);
+                                mBarcode.add(BarcodeScan);
+
+                                et_from.setText("[" + moveModel.getItems().get(0).getWh_code() + "] " + moveModel.getItems().get(0).getWh_name());
+                                wh_code = moveModel.getItems().get(0).getWh_code();
+                                tv_cnt.setText(Integer.toString(mAdapter.itemsList.size()));
+                                for (int j = 0; j < mAdapter.itemsList.size(); j++){
+                                    //cnt += moveListModel.get(j).getInv_qty();
+                                    cnt += mAdapter.itemsList.get(j).getInv_qty();
+                                }
+                                tv_list_cnt.setText(Integer.toString(cnt));
+                            }
+                        } else {
+                            Utils.Toast(mContext, model.getMSG());
+                            beg_barcode = "";
+                            sound_pool.play(soundId, 1f, 1f, 0, 1, 1f);
+                            mediaPlayer = MediaPlayer.create(mContext, R.raw.beepum);
+                            mediaPlayer.start();
+                        }
+                    }
+                } else {
+                    Utils.LogLine(response.message());
+                    Utils.Toast(mContext, response.code() + " : " + response.message());
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<WhMoveListModel> call, Throwable t) {
+                Utils.LogLine(t.getMessage());
+                Utils.Toast(mContext, getString(R.string.error_network));
+            }
+        });
     }//Close
 
-    class ListAdapter extends BaseAdapter {
-        LayoutInflater mInflater;
 
-        public ListAdapter() {
-            mInflater = LayoutInflater.from(mContext);
+    public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+
+        List<WhMoveListModel.Item> itemsList;
+        Activity mActivity;
+        Handler mHandler = null;
+
+        public ListAdapter(Activity context) {
+            mActivity = context;
         }
 
-        public int getItemCount() {
-            return (null == moveListModel ? 0 : moveListModel.size());
+        public void setData(List<WhMoveListModel.Item> list){
+            itemsList = list;
+        }
+
+        public void clearData(){
+            if(itemsList != null)itemsList.clear();
+        }
+
+        public void setRetHandler(Handler h){
+            this.mHandler = h;
+        }
+
+        public List<WhMoveListModel.Item> getData(){
+            return itemsList;
         }
 
         public void addData(WhMoveListModel.Item item) {
-            if (moveListModel == null) moveListModel = new ArrayList<>();
-            moveListModel.add(item);
-        }
-
-        public void clearData() {
-            moveListModel.clear();
-        }
-
-        public List<WhMoveListModel.Item> getData() {
-            return moveListModel;
+            if (itemsList == null) itemsList = new ArrayList<>();
+            itemsList.add(item);
         }
 
         @Override
-        public int getCount() {
-            if (moveListModel == null) {
-                return 0;
-            }
-
-            return moveListModel.size();
-        }
-
-
-        @Override
-        public WhMoveListModel.Item getItem(int position) {
-            return moveListModel.get(position);
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, final int z) {
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cell_wh_move_list, viewGroup, false);
+            ViewHolder holder = new ViewHolder(v);
+            return holder;
         }
 
         @Override
-        public long getItemId(int position) {
-            return position;
-        }
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            View v = convertView;
-            ViewHolder holder;
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            if (v == null) {
-                holder = new ViewHolder();
-                v = inflater.inflate(R.layout.cell_wh_move_list, null);
+            final WhMoveListModel.Item item = itemsList.get(position);
 
-                holder.itm_name = v.findViewById(R.id.tv_itm_name);
-                holder.tv_c_name = v.findViewById(R.id.tv_c_name);
-                //holder.tv_wh_name = v.findViewById(R.id.tv_wh_name);
-                holder.inv_qty = v.findViewById(R.id.tv_inv_qty);
-                holder.tv_lot = v.findViewById(R.id.tv_lot);
-
-                v.setTag(holder);
-
-            } else {
-                holder = (ViewHolder) v.getTag();
-            }
-
-            final WhMoveListModel.Item data = moveListModel.get(position);
-            holder.itm_name.setText(data.getItm_code()+ "  " +data.getItm_name());
-            holder.tv_c_name.setText(data.getC_name());
+            holder.tv_no.setText(Integer.toString(position+1));
+            holder.itm_name.setText(item.getItm_code()+ "  " +item.getItm_name());
+            holder.tv_c_name.setText(item.getC_name());
             //holder.tv_wh_name.setText(data.getWh_name());
-            holder.inv_qty.setText(Integer.toString(data.getInv_qty()));
-            holder.tv_lot.setText(data.getLot_no()+ "   " + data.getWh_name());
+            holder.inv_qty.setText(Integer.toString(item.getInv_qty()));
+            holder.tv_lot.setText(item.getLot_no()+ "   " + item.getWh_name());
+
+            holder.bt_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    mTwoBtnPopup = new TwoBtnPopup(mActivity, item.getLot_no() + " 삭제하시겠습니까?", R.drawable.popup_title_alert, new Handler() {
+                        public void handleMessage(Message msg) {
+                            if (msg.what == 1) {
+                                itemsList.remove(position);
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, itemsList.size());
+                                mBarcode.remove(item.getLot_no());
+                                if (beg_barcode != null){
+                                    if (beg_barcode.equals(item.getLot_no())){
+                                        beg_barcode = "";
+                                    }
+                                }
+                                mTwoBtnPopup.hideDialog();
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                    });
+
+                }
+            });
 
 
-            return v;
         }
 
-        public class ViewHolder {
+        @Override
+        public int getItemCount() {
+            return (null == itemsList ? 0 : itemsList.size());
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
+            TextView tv_no;
             TextView itm_name;
             TextView tv_c_name;
             TextView tv_wh_name;
             TextView inv_qty;
             TextView tv_lot;
+            ImageButton bt_delete;
+
+            public ViewHolder(View view) {
+                super(view);
+
+                tv_no = view.findViewById(R.id.tv_no);
+                itm_name = view.findViewById(R.id.tv_itm_name);
+                tv_c_name = view.findViewById(R.id.tv_c_name);
+                inv_qty = view.findViewById(R.id.tv_inv_qty);
+                tv_lot = view.findViewById(R.id.tv_lot);
+                bt_delete = view.findViewById(R.id.bt_delete);
+
+                /*view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Message msg = new Message();
+                        msg.obj = itemsList.get(getAdapterPosition());
+                        msg.what= getAdapterPosition();
+                        mHandler.sendMessage(msg);
+                    }
+                });*/
+            }
         }
-    }//Close Adapter
+    }
 
 
     /**
