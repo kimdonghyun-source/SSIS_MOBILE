@@ -252,6 +252,8 @@ public class ShipOkFragment extends CommonFragment {
     }
 
 
+
+
     /**
      * 출하피킹 바코드스캔
      */

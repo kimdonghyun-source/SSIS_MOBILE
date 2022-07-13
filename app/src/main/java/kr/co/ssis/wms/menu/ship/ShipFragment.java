@@ -290,7 +290,6 @@ public class ShipFragment extends CommonFragment {
                                         mAdapter.clearData();
                                         mAdapter.notifyDataSetChanged();
                                         et_itm.setText("");
-
                                     }
 
                                     ItmListModel.Item order = (ItmListModel.Item) msg.obj;

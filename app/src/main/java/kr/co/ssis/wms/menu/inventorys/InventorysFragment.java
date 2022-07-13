@@ -117,10 +117,10 @@ public class InventorysFragment extends CommonFragment {
                     barcodeScan = barcode;
                     et_from.setText(barcodeScan);
 
-                    /*if (mBarcode.contains(barcode)) {
+                    if (mBarcode.contains(barcode)) {
                         Utils.Toast(mContext, "동일한 SerialNo를 스캔하셨습니다.");
                         return;
-                    }*/
+                    }
 
                     if (beg_barcode != null) {
                         if (beg_barcode.equals(barcodeScan)) {
@@ -131,7 +131,7 @@ public class InventorysFragment extends CommonFragment {
 
 
                     pdaSerialScan();
-                    beg_barcode = barcodeScan;
+
                     mBarcode.add(barcodeScan);
                 }
             }
@@ -332,6 +332,7 @@ public class InventorysFragment extends CommonFragment {
                                 tv_qty.setText(Integer.toString(mInvenModel.getItems().get(0).getInv_qty()));
 
                             }
+                            beg_barcode = barcodeScan;
 
                         } else {
                             Utils.Toast(mContext, model.getMSG());

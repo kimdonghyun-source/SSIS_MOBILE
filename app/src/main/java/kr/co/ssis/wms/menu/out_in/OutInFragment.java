@@ -36,8 +36,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import kr.co.siss.wms.R;
 import kr.co.ssis.wms.common.SharedData;
@@ -81,6 +84,7 @@ public class OutInFragment extends CommonFragment {
     List<WarehouseModel.Items> mWarehouseList;
 
     List<String> mIncode;
+    List<String> newList;
 
     private SoundPool sound_pool;
     int soundId;
@@ -93,6 +97,7 @@ public class OutInFragment extends CommonFragment {
         mContext = getActivity();
 
         mIncode = new ArrayList<>();
+        newList = new ArrayList<>();
 
 
     }//Close onCreate
@@ -441,6 +446,10 @@ public class OutInFragment extends CommonFragment {
         String m_date = item_date.getText().toString().replace("-", "");
 
         JsonArray list = new JsonArray();
+
+        /*Set<String> set = new HashSet<String>(mIncode);
+        newList = new ArrayList<String>(set);
+        Log.d("바코드중복값:  ", String.valueOf(newList));*/
 
         //List<MatOutSerialScanModel.Item> items = scanAdapter.getData();
         List<OutInModel.Item> items = mAdapter.getData();
